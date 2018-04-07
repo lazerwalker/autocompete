@@ -1,0 +1,45 @@
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,500&subset=latin-ext');
+
+#sidebar{
+	transition:width 0.3s;
+}
+
+#input, .story-holder, #saved{
+  transition:left 0.3s;
+}
+
+
+#loader{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  border: 0.25rem solid rgba(0, 0, 0, 0.2);
+  border-top-color: #5d5d5d;
+  -webkit-animation: spin 1s infinite linear;
+  animation: spin 1s infinite linear;
+  transition: opacity 0.2s;
+}
+
+textarea,
+input[type="text"],
+input[type="button"],
+input[type="submit"] {
+     -webkit-appearance: none;
+     border-radius: 0;
+}

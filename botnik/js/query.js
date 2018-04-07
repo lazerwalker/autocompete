@@ -1,0 +1,82 @@
+console.log("query")
+
+max_ngram_size = 4
+
+var get_text = function(url, cb){
+  var xmlhttp = new XMLHttpRequest()
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      cb(this.responseText)}}
+  xmlhttp.open("GET", url, true)
+  xmlhttp.send()}
+
+var newline = /[ ]*\n\r?[ ]*|\.[ ]*/
+var wordbreak = /[\,\ \(\[\]\)\{\}\-]+/
+
+cursor = {stack:new Array(max_ngram_size)}
+counts = {}
+tree = {}
+
+
+var stack_push = function(col, v){
+  var l = col.length
+  for (var i = 0; i < l-1; i++) {
+    col[i] = col[i+1]
+  }
+  col[l-1] = v
+  return col
+}
+
+var next_word = function(word, idx, col) {
+  stack_push(cursor.stack, word)
+  for (var i = max_ngram_size; i > 0; i--) {
+    var ngram = cursor.stack.slice(max_ngram_size-i, max_ngram_size)
+    // our stack will start with undefined values in the beginning
+    if (ngram[0] != undefined){
+      // ngram counting
+      // string_gram = ngram.join(" ")
+      // if (counts[string_gram]){
+      //   counts[string_gram] += 1
+      // } else {
+      //   counts[string_gram] = 1
+      // }
+      // tree insertion
+      var tail = ngram.pop()
+      var head = ngram.join(" ")
+      if (tree[head]) {
+        if (tree[head][tail]){
+          tree[head][tail] += 1
+        } else {
+          tree[head][tail] = 1
+        }
+      } else {
+        m = {}
+        m[tail] = 1
+        tree[head] = m
+      }
+    }
+  }
+}
+
+var parse = function(s){
+  window.final = []
+  var lines = s.split(newline)
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i]
+    if (line != "") {
+      var words = line.split(wordbreak)
+      for (var j = 0; j < words.length; j++) {
+        final.push(words[j])
+      }
+    }
+  }
+  //console.log(lines)
+  //console.log(lines)
+  //console.log(final)
+  final.forEach(next_word)
+}
+
+get_text("data/ludacris.txt", parse)
+
+//parse("The quick red fox jumped over the red dog. Quick fox looked at the dog's quick red rocket.")
+

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <style>
+    body, html {
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <iframe src="index.html" style="width: 100%; height: 100%;"></iframe>
+
+</body>
+
+<script type="text/javascript">
+  console.log("Uh, hi?")
+  window.addEventListener("load", function() {
+    console.log("Load")
+    var iframe = document.getElementsByTagName("iframe")[0].contentWindow
+    if (iframe) {
+      window.iframeWindow = iframe
+      console.log("Host posting message")
+      iframe.postMessage("10268a85631625beed0b235f25072506", "*")
+    }
+  });
+
+  window.addEventListener("message", function(message) {
+    console.log("Host received response", message)
+  });
+</script>
+</html>
